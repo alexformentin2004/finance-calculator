@@ -1,9 +1,9 @@
 'use strict';
-/* Finance Calculator 4.0 — aggiornamenti affidabili e funzionamento offline */
-const CACHE='finance-calculator-v4.0.0';
+/* Finance Calculator 5.0 — aggiornamenti affidabili e funzionamento offline */
+const CACHE='finance-calculator-v5.0.0';
 const ASSETS=[
- './','./index.html','./style.css?v=4.0.0','./theme-v4.css?v=4.0.0',
- './finance.js?v=4.0.0','./app.js?v=4.0.0','./manifest.webmanifest',
+ './','./index.html','./style.css?v=5.0.0','./theme-v4.css?v=5.0.0','./theme-v5.css?v=5.0.0',
+ './finance.js?v=5.0.0','./app.js?v=5.0.0','./manifest.webmanifest',
  './icons/icon-192.svg','./icons/icon-512.svg','./icons/apple-touch-icon.png'
 ];
 self.addEventListener('install',event=>{
