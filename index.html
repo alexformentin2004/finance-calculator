@@ -12,19 +12,18 @@
   <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
   <link rel="icon" type="image/svg+xml" href="./icons/icon-192.svg">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./style.css?v=3.0.0">
   <title>Finance Calculator · Simulazioni personali</title>
 </head>
-<body>
+<body data-finance-type="mutuo">
   <div id="app" class="app-shell">
     <header class="topbar">
-      <div class="brand"><div class="brand-mark" aria-hidden="true">€</div><div><strong>Finance Calculator</strong><small>Il tuo simulatore personale</small></div></div>
+      <div class="brand"><div class="brand-mark" aria-hidden="true">€</div><div><strong>Finance Calculator</strong><small>FINANCE LAB <span class="version-badge">VERSIONE 3.0</span></small></div></div>
       <div id="connection" class="connection">● <span>Solo sul dispositivo</span></div>
     </header>
     <main>
       <section id="calculatorPage" class="page">
-        <div class="section-intro"><div class="eyebrow">IL TUO SPAZIO FINANZIARIO</div><h1>Le scelte importanti,
-con numeri chiari.</h1><p>Simula mutui, finanziamenti auto e prestiti. Controlla ogni costo, cambia le condizioni e confronta le offerte.</p><div class="hero-trust"><span><i></i> Calcoli immediati</span><span><i></i> Nessuna registrazione</span><span><i></i> Archivio privato</span></div></div>
+        <div class="section-intro"><div class="eyebrow">IL TUO SPAZIO FINANZIARIO</div><h1>Ogni acquisto.<br><em>Una scelta chiara.</em></h1><p>Simula mutui, finanziamenti auto e prestiti. Controlla ogni costo, cambia le condizioni e confronta le offerte.</p><div class="hero-trust"><span><i></i> Calcoli immediati</span><span><i></i> Nessuna registrazione</span><span><i></i> Archivio privato</span></div></div>
         <div class="type-tabs" role="tablist" aria-label="Tipo di finanziamento">
           <button class="type-tab active" data-type="mutuo" role="tab" aria-selected="true"><span class="type-icon" aria-hidden="true">⌂</span> Mutuo</button>
           <button class="type-tab" data-type="auto" role="tab" aria-selected="false"><span class="type-icon" aria-hidden="true">▰</span> Auto</button>
@@ -72,7 +71,7 @@ con numeri chiari.</h1><p>Simula mutui, finanziamenti auto e prestiti. Controlla
               <div class="main-metric"><div id="mainMetricLabel">Rata mensile</div><div id="mainMetric">—</div><div id="metricSubtitle">TAN 3,50% · 360 rate</div></div>
               <div class="payment-details"><div><span>Rata senza spese</span><strong id="regularOutput">—</strong></div><div><span>Spese per rata</span><strong id="recurringOutput">—</strong></div></div>
               <div class="result-kpis"><div><span>Capitale finanziato</span><strong id="capitalOutput">—</strong></div><div><span>Anticipo / liquidità iniziale</span><strong id="upfrontOutput">—</strong></div><div><span>Interessi totali</span><strong id="interestOutput">—</strong></div><div><span>TAEG stimato</span><strong id="aprOutput">—</strong></div></div>
-              <div class="distribution"><div class="bar-label">Composizione delle rate</div><div class="distbar"><div id="capitalBar" class="capital-part"></div><div id="interestBar" class="interest-part"></div><div id="feeBar" class="fee-part"></div></div><div class="bar-legend"><span><i class="bullet capital"></i> Capitale</span><span><i class="bullet interest"></i> Interessi</span><span><i class="bullet fees"></i> Spese</span></div></div>
+              <div class="breakdown-strip" aria-label="Dettaglio pagamenti"><div><span>Rata base</span><strong id="basePaymentOutput">—</strong></div><div><span>Spese al mese</span><strong id="monthlyFeesOutput">—</strong></div><div><span>Ultimo pagamento</span><strong id="lastPaymentOutput">—</strong></div></div><div class="distribution"><div class="bar-label">Composizione delle rate</div><div class="distbar"><div id="capitalBar" class="capital-part"></div><div id="interestBar" class="interest-part"></div><div id="feeBar" class="fee-part"></div></div><div class="bar-legend"><span><i class="bullet capital"></i> Capitale</span><span><i class="bullet interest"></i> Interessi</span><span><i class="bullet fees"></i> Spese</span></div></div>
               <div class="total-row"><div><small>Esborso complessivo</small><strong id="totalOutput">—</strong></div><button id="showSchedule" class="secondary-button" type="button">Piano rate ↓</button></div>
               <p id="balloonNote" class="balloon-note" hidden></p><div class="credit-cost-row"><span>Costo totale del credito (stimato)</span><strong id="creditCostOutput">—</strong></div><p id="additionalNote" class="help-note">Simulazione indicativa, non è un preventivo bancario.</p><p id="errorBox" class="error-box" role="alert" hidden></p>
             </section>
@@ -90,7 +89,7 @@ sempre a portata di mano.</h1><p>Rivedi, modifica e confronta le simulazioni sal
   <dialog id="saveDialog" class="modal"><form method="dialog"><h2>Salva la simulazione</h2><p>Assegna un nome per ritrovarla nell'archivio.</p><label class="field full"><span>Nome simulazione</span><input id="simulationName" type="text" maxlength="70" placeholder="Es. Mutuo prima casa 90%"></label><div class="modal-actions"><button type="submit" value="cancel" class="secondary-button">Annulla</button><button type="submit" value="save" class="primary-button">Salva</button></div></form></dialog>
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
   <div class="print-report"><h1>Finance Calculator – simulazione</h1><p id="printSummary"></p><p>Le simulazioni sono puramente indicative, non costituiscono offerta o consulenza finanziaria.</p></div>
-  <script src="./finance.js" defer></script>
-  <script src="./app.js" defer></script>
+  <script src="./finance.js?v=3.0.0" defer></script>
+  <script src="./app.js?v=3.0.0" defer></script>
 </body>
 </html>
