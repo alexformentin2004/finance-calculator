@@ -86,7 +86,7 @@
       const info=compute();state.result=info.result;state.calcInfo=info;renderResult(info);$('errorBox').hidden=true;
       $('saveSimulation').disabled=false;$('printSimulation').disabled=false;$('csvButton').disabled=false;
     }catch(e){state.result=null;state.calcInfo=null;$('errorBox').textContent=e.message;$('errorBox').hidden=false;
-      $('mainMetric').textContent='—';['capitalOutput','upfrontOutput','interestOutput','aprOutput','totalOutput','regularOutput','recurringOutput','creditCostOutput'].forEach(id=>$(id).textContent='—');
+      $('mainMetric').textContent='—';['capitalOutput','upfrontOutput','interestOutput','aprOutput','totalOutput','regularOutput','recurringOutput','creditCostOutput','basePaymentOutput','monthlyFeesOutput','lastPaymentOutput'].forEach(id=>$(id).textContent='—');
       $('saveSimulation').disabled=true;$('printSimulation').disabled=true;$('csvButton').disabled=true;
       $('chartLine').setAttribute('d','');$('chartArea').setAttribute('d','');$('scheduleBody').replaceChildren();
     }
@@ -101,6 +101,9 @@
     $('regularOutput').textContent=euro(r.regular);
     $('recurringOutput').textContent=euro(r.monthlyFees);
     $('creditCostOutput').textContent=euro(r.totalCreditCost);
+    $('basePaymentOutput').textContent=euro(r.regular);
+    $('monthlyFeesOutput').textContent=euro(r.monthlyFees);
+    $('lastPaymentOutput').textContent=euro(r.schedule[r.schedule.length-1].payment+r.monthlyFees);
     $('capitalOutput').textContent=euro0(r.principal);
     $('upfrontOutput').textContent=euro0(r.upfrontCash);
     $('interestOutput').textContent=euro0(r.totalInterest);
@@ -209,7 +212,7 @@
     window.addEventListener('online',()=>{$('connection').innerHTML='● <span>Solo sul dispositivo</span>';});
     window.addEventListener('offline',()=>{$('connection').innerHTML='● <span>Offline</span>';});
     if(!navigator.onLine)$('connection').innerHTML='● <span>Offline</span>';
-    if('serviceWorker' in navigator&&location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
+    if('serviceWorker' in navigator&&location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js?v=3.0.0',{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{}));
     restoreInputs(state.typeInputs.mutuo);setAdvanced(false);showType('mutuo');renderArchive();
   }
   install();
