@@ -45,7 +45,7 @@ function applyTypeIdentity(type){
   icon.className='calc-big-icon '+info.iconClass;
   const source=document.querySelector('[data-open-type="'+type+'"] .product-icon');
   if(source)icon.innerHTML=source.innerHTML;
-  ['feature1','feature2','feature3'].forEach((id,i)=>$(id).textContent=info.features[i]);
+
 }
   function showType(next){syncCurrent();state.type=next;document.body.dataset.financeType=next;applyTypeIdentity(next);restoreInputs(state.typeInputs[next]);document.querySelectorAll('.type-tab').forEach(b=>{const is=b.dataset.type===next;b.classList.toggle('active',is);b.setAttribute('aria-selected',String(is));});
     $('downWrap').hidden=next==='prestito';$('priceLabel').textContent=next==='mutuo'?"Prezzo dell'immobile":next==='auto'?'Prezzo auto':'Importo da ricevere';$('mortgageAdvanced').hidden=next!=='mutuo';$('autoAdvanced').hidden=next!=='auto';$('resultTypeBadge').textContent=next.toUpperCase();applyRateNotice();update();}
@@ -239,7 +239,8 @@ function applyTypeIdentity(type){
     document.querySelectorAll('.nav-button').forEach(b=>b.addEventListener('click',()=>switchPage(b.dataset.page)));
     document.querySelectorAll('[data-open-type]').forEach(b=>b.addEventListener('click',()=>switchPage(b.dataset.openType+'Page')));
     $('backHome').addEventListener('click',()=>switchPage('homePage'));
-    $('showAllArchive').addEventListener('click',()=>switchPage('archivePage'));
+    $('openArchive').addEventListener('click',()=>switchPage('archivePage'));
+    $('backFromArchive').addEventListener('click',()=>switchPage('homePage'));
     $('showSchedule').addEventListener('click',()=>{$('schedulePanel').hidden=!$('schedulePanel').hidden;if(!$('schedulePanel').hidden&&state.result){renderSchedule(state.result);$('schedulePanel').scrollIntoView({behavior:'smooth',block:'start'});} });
     $('csvButton').addEventListener('click',exportCSV);
     $('printSimulation').addEventListener('click',()=>{if(state.result)window.print();});
@@ -258,7 +259,7 @@ function applyTypeIdentity(type){
     window.addEventListener('online',()=>{$('connection').innerHTML='● <span>Solo sul dispositivo</span>';});
     window.addEventListener('offline',()=>{$('connection').innerHTML='● <span>Offline</span>';});
     if(!navigator.onLine)$('connection').innerHTML='● <span>Offline</span>';
-    if('serviceWorker' in navigator&&location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js?v=5.0.0',{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{}));
+    if('serviceWorker' in navigator&&location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js?v=6.0.0',{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{}));
     restoreInputs(state.typeInputs.mutuo);setAdvanced(false);showType('mutuo');renderArchive();switchPage('homePage');
   }
   install();
