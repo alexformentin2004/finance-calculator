@@ -1,0 +1,229 @@
+/* Finance Calculator v7 — Mobile UI refinement following MoneyTrack patterns.
+   Original Finance Calculator interface, lightweight CSS; no font/CDN/image dependencies. */
+:root{
+  --fc-ink:#20304d;--fc-secondary:#7584a0;--fc-line:#e2e8f2;--fc-canvas:#eef2f8;
+  --fc-surface:#fff;--fc-tint:#f7f9fd;--fc-mint:#0d9879;--fc-mint-soft:#e4f8ef;
+  --accent:#4765cf;--accent-soft:#edf0fe;--accent-border:#ccd5fa;
+  --shadow:0 8px 27px rgba(35,55,97,.055);color-scheme:light;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;
+}
+*{-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:12px;background:var(--fc-canvas)}
+body{margin:0;background:linear-gradient(153deg,#eef2f9,#e9eef7);color:var(--fc-ink);min-height:100vh;min-height:100dvh}
+body[data-finance-type=auto]{--accent:#715ca7;--accent-soft:#f1edfa;--accent-border:#ddd2f3}
+body[data-finance-type=prestito]{--accent:#1c7c83;--accent-soft:#e8f6f6;--accent-border:#bae0df}
+button,input,select,textarea{touch-action:manipulation}
+button{transition:background-color .15s ease,transform .13s ease,border-color .15s ease}
+button:active:not(:disabled){transform:scale(.985)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #90b7e8;outline-offset:2px}
+button:disabled{opacity:.48;cursor:not-allowed}
+[hidden]{display:none!important}
+.app-shell{max-width:1060px;padding:0 25px;margin:0 auto}
+main{padding-bottom:calc(38px + env(safe-area-inset-bottom,0px))}
+.topbar{height:82px;border-bottom:1px solid #e1e7f0;padding:0 1px}
+.brand{gap:11px}.brand-mark{width:42px;height:42px;border-radius:14px;background:#26395d;color:#fff;box-shadow:0 6px 17px #283e6331;font-size:25px}
+.brand strong{font-size:17px;color:#253650;font-weight:830;letter-spacing:-.55px}
+.brand small{color:#8693ab;font-size:11px;margin-top:2px}
+.connection{border:1px solid #dee9e8;background:#f1f9f5;color:#417c6f;border-radius:20px;font-size:11px;padding:8px 11px;font-weight:750}
+.page{animation:fc-fade .21s ease-out}
+@keyframes fc-fade{from{opacity:.5;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+/* Four quiet, large touch targets on Home, with MoneyTrack's soft card rhythm */
+.simple-home{max-width:780px;padding:62px 0 60px}
+.home-heading{margin-bottom:25px}
+.home-kicker{color:#8192b0;font-size:10px;letter-spacing:1.7px;font-weight:820}
+.home-heading h1{font-size:clamp(32px,4.2vw,45px);font-weight:850;letter-spacing:-1.8px;line-height:1.12;color:#20314d;margin:13px 0 9px}
+.home-heading p{font-size:14px;color:#8a98ad}
+.home-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.home-action{background:#fff;border:1px solid #e4eaf3;box-shadow:0 6px 22px #233f6a0a;border-radius:22px;min-height:119px;padding:22px 20px;gap:16px}
+.home-action:hover{background:#fff;border-color:#cdd7e9;box-shadow:0 10px 25px #25406913}
+.home-action:active{background:#f9fbff}
+.home-action-copy{gap:6px}
+.home-action-copy strong{font-size:17px;font-weight:800;letter-spacing:-.45px;color:#2a3952}
+.home-action-copy small{font-size:11px;line-height:1.45;color:#8b97aa}
+.home-action-chevron{color:#a1abc0}
+.home-action-chevron svg{height:18px;width:18px}
+.product-icon{height:50px;width:50px;flex:0 0 50px;border-radius:16px}
+.product-icon.icon-mortgage{background:#e9efff;color:#456add}
+.product-icon.icon-car{background:#f0eafd;color:#815bd7}
+.product-icon.icon-loan{background:#e1f6f2;color:#109b84}
+.product-icon.icon-archive{background:#edf2fa;color:#56749b}
+.product-icon svg{width:24px;height:24px;stroke-width:1.9}
+/* Calculator heading: concise and distinct, no duplicate hero */
+.calc-route-head{padding:26px 0 20px;margin:0}
+.calc-breadcrumb{color:#91a0b7;gap:9px}
+.back-home{font-size:12px;color:#657993;font-weight:740;min-height:44px;padding:9px 0}
+.back-home:hover{color:#304b71}
+.calc-title-row{margin-top:13px}
+.calc-title-row h1{font-size:clamp(29px,3.6vw,39px);color:#223451;font-weight:850;letter-spacing:-1.5px}
+.calc-title-row p{color:#8491a5;font-size:12px}
+.calc-big-icon{width:59px;height:59px;border-radius:18px;background:var(--accent-soft);color:var(--accent)}
+.calc-big-icon.icon-car{background:var(--accent-soft);color:var(--accent)}
+.calc-big-icon.icon-loan{background:var(--accent-soft);color:var(--accent)}
+.quick-result{display:none;width:100%;align-items:center;justify-content:space-between;gap:12px;padding:15px 18px;border:1px solid #dbe8e8;border-radius:19px;margin-top:18px;background:linear-gradient(130deg,#f2fcf8,#e7f8f2);text-align:left;color:#27574e}
+.quick-result-text{display:flex;flex-direction:column;gap:5px}
+.quick-result-text small{font-size:11px;color:#628d81;font-weight:660}
+.quick-result-text strong{font-size:clamp(24px,6vw,30px);font-weight:860;letter-spacing:-1.05px;line-height:1.1;color:#125b4d;overflow-wrap:anywhere}
+.quick-result-action{display:inline-flex;gap:5px;align-items:center;font-size:11px;font-weight:780;color:#2b7969;white-space:nowrap}
+.quick-result-action span{font-size:15px}
+.layout-columns{gap:16px;grid-template-columns:minmax(0,1fr) minmax(0,.97fr)}
+.result-col{position:sticky;top:14px}
+.panel{background:#fff;border:1px solid #e3eaf3;border-radius:23px;box-shadow:0 8px 27px #243c690b;margin-bottom:14px}
+.entry-panel,.focus-panel,.chart-panel,.schedule-panel{padding:23px}
+.panel-head h2{font-size:16px;color:#2a3953;letter-spacing:-.35px;font-weight:830}
+.panel-head small{color:#98a3b5}
+.mode-switch,.micro-switch{background:#eff3f9;border:1px solid #e9eef6;border-radius:12px}
+.mode-switch button,.micro-switch button{border-radius:9px;font-size:11px;font-weight:790;color:#7989a2;min-height:39px}
+.mode-switch button.active,.micro-switch button.active{background:#fff;color:#315276;box-shadow:0 2px 7px #253f681c}
+.fields{gap:16px 13px}
+.field{gap:8px}
+.field>span:first-child,.field-label>label{color:#586b84;font-size:12px;font-weight:750}
+.input-unit{height:56px;background:#f8faff;border:1px solid #e3e9f2;border-radius:15px}
+.input-unit:focus-within{border-color:#8ba9d6;background:#fff;box-shadow:0 0 0 3px #b4c7eb32}
+.input-unit input{color:#243955;font-size:17px;font-weight:800;letter-spacing:-.35px;padding:12px 14px}
+.input-unit b{color:#6d8099;background:#f0f4fa;border-left:1px solid #e5eaf3;font-size:12px}
+.field select,.field>input{height:56px;border:1px solid #e3e9f2;border-radius:15px;background:#f8faff;color:#2e425c;font-size:15px}
+.field-hint,.help-note{color:#8e9ab0;font-size:11px;line-height:1.7}
+.subheading{border-color:#e9eef5}
+.text-button{color:#526bb1;font-weight:800;min-height:44px;border-radius:12px}
+.text-button:hover{background:#f2f5fc}
+.solution{border:1px solid #e2e9f4;background:#f9fbff;min-height:85px;border-radius:15px}
+.solution.active{background:#edf3ff;border:1.5px solid #b9c9f1}
+.solution strong{font-size:13px;color:#354c6a}
+.solution.active strong{color:#31579c}
+.solution small{color:#8e9bb0}
+/* MoneyTrack-like financial hierarchy, with live total and soft cards */
+.results-panel{background:#fff;color:#273b55;border:1px solid #e3eaf3;padding:24px;border-radius:24px;overflow:visible}
+.result-heading{color:#7f90a8;font-size:10px;letter-spacing:1.1px}
+.type-pill{background:var(--accent-soft);border:1px solid var(--accent-border);color:var(--accent)}
+.main-metric{background:linear-gradient(135deg,#253b60,#344e78);border-radius:18px;padding:24px;margin:17px 0 15px;color:#fff;box-shadow:0 10px 26px -20px #12244878}
+body[data-finance-type=auto] .main-metric{background:linear-gradient(135deg,#37305b,#64527c)}
+body[data-finance-type=prestito] .main-metric{background:linear-gradient(135deg,#1f4d57,#277b80)}
+.main-metric>div:first-child{color:#cad4e4;font-size:11px;font-weight:740}
+.main-metric>div:nth-child(2){color:#fff;letter-spacing:-1.9px;font-size:clamp(37px,4.5vw,51px);font-weight:850;line-height:1.14;overflow-wrap:anywhere}
+.main-metric>div:last-child{color:#d0d8e7;font-size:11px}
+.payment-details{display:none}
+.result-kpis{gap:10px;margin:0 0 16px}
+.result-kpis>div{background:#f8faff;border:1px solid #edf1f7;border-radius:15px;padding:13px;gap:8px}
+.result-kpis span{font-size:11px;color:#8c9aaf}
+.result-kpis strong{font-size:17px;font-weight:800;color:#304760}
+.breakdown-strip{border-color:#e7edf5;border-radius:13px;padding:14px 5px;margin-bottom:14px}
+.breakdown-strip>div{padding:0 8px}
+.breakdown-strip>div+div{border-color:#e7edf5}
+.breakdown-strip span{font-size:10px;color:#8899b0}
+.breakdown-strip strong{font-size:12px;color:#35506a;overflow-wrap:anywhere}
+.distribution{padding-top:17px}
+.bar-label{font-size:11px;color:#8293a9}
+.distbar{height:10px}
+.capital-part,.bullet.capital{background:#6c82b9}
+.interest-part,.bullet.interest{background:#f0b97a}
+.fee-part,.bullet.fees{background:#b2bfd3}
+.bar-legend{color:#7d8da3;font-size:10px}
+.total-row{border-top:1px solid #e9eef5;align-items:center}
+.total-row small{color:#8092aa}
+.total-row strong{font-size:24px;color:#263c57;font-weight:840}
+.results-panel .secondary-button{color:#345775;background:#f1f5fa;border-color:#e6edf5}
+.credit-cost-row{border-color:#e8eef5;color:#8b9bb0}
+.credit-cost-row strong{color:#344c68}
+.results-panel>.help-note{color:#98a4b7}
+.balloon-note{background:#fff8ed;border:1px solid #f0e1c7;color:#8b6632!important}
+.action-row{gap:10px}
+.primary-button{background:#0d9879;color:#fff;border:1px solid #0d9879;box-shadow:0 8px 22px -17px #0c9474}
+.primary-button:hover{background:#0b8269}
+.secondary-button{background:#f3f6fa;border:1px solid #e7edf5;color:#48617e}
+.secondary-button:hover{background:#e9eff6}
+.primary-button,.secondary-button{min-height:48px;border-radius:14px;font-size:12px;padding:11px 16px}
+.chart-panel #chartLine{stroke:#6586c5}
+.chart-panel #chartArea{fill:#ebf0fa}
+.chart-panel svg{height:155px}
+.chart-ends{color:#8f9bb0}
+.table-scroll{border-radius:13px;border:1px solid #e6edf5}
+th{background:#f7f9fd;color:#71829c;font-size:10px}
+td,th{padding:13px 12px;border-color:#eff2f8}
+tbody tr:hover{background:#f5f8ff}
+/* Archive with same list language as MoneyTrack */
+#archivePage .section-intro{padding:16px 0 21px}
+#archivePage .section-intro h1{color:#263954}
+#archivePage .section-intro p{color:#8795ab}
+.archive-tools{border:0;background:transparent;box-shadow:none;padding:0;margin-bottom:14px}
+.saved-list{gap:11px}
+.saved-card{border:1px solid #e4eaf3;border-radius:20px;box-shadow:0 6px 18px #243e6309;background:#fff;padding:18px}
+.saved-card h3{color:#263d5a;font-size:15px}
+.saved-card p{color:#8e9cb1}
+.saved-card strong{color:#315773}
+.saved-card .saved-actions button{border:1px solid #e8edf6;background:#f6f8fc;color:#4e6987;border-radius:10px;min-height:38px}
+.saved-card .saved-actions .danger-button{background:#fff6f6;color:#b65964!important}
+.saved-check input{accent-color:#0d9879}
+.empty-state{border-color:#d7e1ef;border-radius:20px;background:#fff}
+.modal{border:1px solid #e4e9f2;border-radius:23px;box-shadow:0 28px 65px #1e365548}
+.modal h2{font-size:21px;color:#263955}
+.modal p{color:#8999af}
+.modal .field>input{font-size:16px}
+.modal-actions{gap:8px}
+.toast{background:#293b5c;color:#fff;border-radius:12px;bottom:calc(26px + env(safe-area-inset-bottom,0px));font-size:12px}
+.bottom-nav{display:none!important}
+@media(max-width:790px){
+  .app-shell{max-width:560px;padding:0 18px;min-height:100vh;min-height:100dvh}
+  .topbar{height:74px}
+  .simple-home{padding:54px 0 36px}
+  .home-heading h1{font-size:37px;letter-spacing:-1.4px}
+  .home-actions{grid-template-columns:1fr;gap:11px}
+  .home-action{min-height:102px;padding:19px 17px}
+  .layout-columns{display:block}
+  .result-col{position:static}
+  .calc-route-head{padding:23px 0 16px}
+  .calc-title-row h1{font-size:32px}
+  .quick-result{display:flex}
+  .entry-panel,.focus-panel,.chart-panel,.schedule-panel{padding:20px}
+  .advanced-toggle-wrap{margin-left:-20px;margin-right:-20px}
+  main{padding-bottom:calc(45px + env(safe-area-inset-bottom,0px))}
+  .panel{margin-bottom:14px}
+  .results-panel{padding:21px}
+}
+@media(max-width:649px){
+  .app-shell{max-width:100%;padding:env(safe-area-inset-top,0px) 16px calc(32px + env(safe-area-inset-bottom,0px));}
+  .topbar{height:69px}
+  .connection{width:31px;height:31px;font-size:0;padding:0;display:grid;place-items:center}
+  .connection::first-letter{font-size:14px}
+  .connection span{display:none}
+  .home-heading h1{font-size:35px}
+  .home-heading p{font-size:13px}
+  .simple-home{padding-top:48px}
+  .home-action{border-radius:21px}
+  .home-action-copy strong{font-size:17px}
+  .home-action-copy small{font-size:11px}
+  /* Safari iOS: prevent automatic zoom & oversized native fields */
+  input,select,textarea{font-size:16px!important;max-width:100%}
+  input{min-width:0}
+  .input-unit input{font-size:17px!important}
+  .field select{font-size:16px!important}
+  .modal{position:fixed;top:auto;bottom:0;left:0;right:0;margin:0;width:100%;max-width:none;max-height:calc(100dvh - env(safe-area-inset-top,0px) - 16px);overflow:auto;overscroll-behavior:contain;
+    border-radius:28px 28px 0 0;border:0;padding:28px 20px calc(23px + env(safe-area-inset-bottom,0px));transform:none;box-shadow:0 -22px 65px #17294b38}
+  .modal:before{content:"";position:absolute;top:11px;left:50%;transform:translateX(-50%);width:43px;height:5px;border-radius:6px;background:#d1d9e5}
+  .modal::backdrop{background:rgba(27,42,68,.48)}
+  .modal-actions button{flex:1;min-height:50px}
+  #saveSimulation{flex:1.12}
+}
+@media(max-width:440px){
+  .app-shell{padding-left:15px;padding-right:15px}
+  .brand strong{font-size:15px}
+  .brand small{font-size:10px}
+  .brand-mark{height:39px;width:39px;font-size:22px;border-radius:13px}
+  .home-heading h1{font-size:32px;letter-spacing:-1.15px}
+  .home-action{padding:15px;gap:13px;min-height:94px}
+  .product-icon{width:46px;height:46px;flex-basis:46px;border-radius:15px}
+  .home-action-copy strong{font-size:16px}
+  .calc-title-row h1{font-size:31px}
+  .calc-big-icon{height:52px;width:52px;border-radius:16px}
+  .quick-result{padding:14px 16px;margin-top:15px}
+  .quick-result-text strong{font-size:26px}
+  .quick-result-action{font-size:10px}
+  .result-kpis{grid-template-columns:1fr 1fr}
+  .result-kpis strong{font-size:16px}
+  .main-metric>div:nth-child(2){font-size:40px}
+  .total-row strong{font-size:21px}
+  .total-row .secondary-button{font-size:10px;min-height:39px;padding:9px}
+  .saved-card{grid-template-columns:1fr;gap:9px}
+  .saved-card .saved-actions{flex-direction:row;align-items:center;flex-wrap:wrap}
+}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important;transition:none!important}}
+@media print{body{background:white}.app-shell,dialog,.toast{display:none!important}.print-report{display:block}}
