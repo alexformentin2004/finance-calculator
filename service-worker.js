@@ -1,5 +1,5 @@
 'use strict';
-const CACHE='finance-calculator-v1.0.1';
+const CACHE='finance-calculator-v2.0.0';
 const ASSETS=['./','./index.html','./style.css','./finance.js','./app.js','./manifest.webmanifest','./icons/icon-192.svg','./icons/icon-512.svg','./icons/apple-touch-icon.png'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('finance-calculator-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
