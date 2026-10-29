@@ -1,12 +1,13 @@
 'use strict';
 /* Finance Calculator 6.0 - offline cache, network-first for updates */
-const CACHE='finance-calculator-v6.0.0';
+const CACHE='finance-calculator-v7.0.0';
 const ASSETS=[
  './','./index.html',
- './style.css?v=6.0.0',
- './theme-v6.css?v=6.0.0',
- './finance.js?v=6.0.0',
- './app.js?v=6.0.0',
+ './style.css?v=7.0.0',
+ './theme-v6.css?v=7.0.0',
+ './theme-v7.css?v=7.0.0',
+ './finance.js?v=7.0.0',
+ './app.js?v=7.0.0',
  './manifest.webmanifest',
  './icons/icon-192.svg',
  './icons/icon-512.svg',
