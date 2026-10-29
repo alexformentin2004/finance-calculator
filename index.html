@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f6f8fc">
+  <meta name="theme-color" content="#f6f8fa">
   <meta name="description" content="Calcola mutui, prestiti e finanziamenti auto senza registrarti. Simulazioni offline e archivio locale.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -23,11 +23,12 @@
     </header>
     <main>
       <section id="calculatorPage" class="page">
-        <div class="section-intro"><div class="eyebrow">NUOVA SIMULAZIONE</div><h1>Quanto ti costerà davvero?</h1><p>Confronta le rate, gli interessi e il costo totale. Nessun account, nessun preventivo.</p></div>
+        <div class="section-intro"><div class="eyebrow">IL TUO SPAZIO FINANZIARIO</div><h1>Le scelte importanti,
+con numeri chiari.</h1><p>Simula mutui, finanziamenti auto e prestiti. Controlla ogni costo, cambia le condizioni e confronta le offerte.</p><div class="hero-trust"><span><i></i> Calcoli immediati</span><span><i></i> Nessuna registrazione</span><span><i></i> Archivio privato</span></div></div>
         <div class="type-tabs" role="tablist" aria-label="Tipo di finanziamento">
-          <button class="type-tab active" data-type="mutuo" role="tab" aria-selected="true"><span class="type-icon">⌂</span> Mutuo</button>
-          <button class="type-tab" data-type="auto" role="tab" aria-selected="false"><span class="type-icon">▰</span> Auto</button>
-          <button class="type-tab" data-type="prestito" role="tab" aria-selected="false"><span class="type-icon">€</span> Prestito</button>
+          <button class="type-tab active" data-type="mutuo" role="tab" aria-selected="true"><span class="type-icon" aria-hidden="true">⌂</span> Mutuo</button>
+          <button class="type-tab" data-type="auto" role="tab" aria-selected="false"><span class="type-icon" aria-hidden="true">▰</span> Auto</button>
+          <button class="type-tab" data-type="prestito" role="tab" aria-selected="false"><span class="type-icon" aria-hidden="true">€</span> Prestito</button>
         </div>
         <div class="layout-columns">
           <div class="entry-col">
@@ -69,10 +70,11 @@
             <section id="results" class="results-panel panel" aria-live="polite">
               <div class="result-heading"><span>LA TUA SIMULAZIONE</span><span id="resultTypeBadge" class="type-pill">MUTUO</span></div>
               <div class="main-metric"><div id="mainMetricLabel">Rata mensile</div><div id="mainMetric">—</div><div id="metricSubtitle">TAN 3,50% · 360 rate</div></div>
+              <div class="payment-details"><div><span>Rata senza spese</span><strong id="regularOutput">—</strong></div><div><span>Spese per rata</span><strong id="recurringOutput">—</strong></div></div>
               <div class="result-kpis"><div><span>Capitale finanziato</span><strong id="capitalOutput">—</strong></div><div><span>Anticipo / liquidità iniziale</span><strong id="upfrontOutput">—</strong></div><div><span>Interessi totali</span><strong id="interestOutput">—</strong></div><div><span>TAEG stimato</span><strong id="aprOutput">—</strong></div></div>
               <div class="distribution"><div class="bar-label">Composizione delle rate</div><div class="distbar"><div id="capitalBar" class="capital-part"></div><div id="interestBar" class="interest-part"></div><div id="feeBar" class="fee-part"></div></div><div class="bar-legend"><span><i class="bullet capital"></i> Capitale</span><span><i class="bullet interest"></i> Interessi</span><span><i class="bullet fees"></i> Spese</span></div></div>
               <div class="total-row"><div><small>Esborso complessivo</small><strong id="totalOutput">—</strong></div><button id="showSchedule" class="secondary-button" type="button">Piano rate ↓</button></div>
-              <p id="balloonNote" class="balloon-note" hidden></p><p id="additionalNote" class="help-note">Simulazione indicativa, non è un preventivo bancario.</p><p id="errorBox" class="error-box" role="alert" hidden></p>
+              <p id="balloonNote" class="balloon-note" hidden></p><div class="credit-cost-row"><span>Costo totale del credito (stimato)</span><strong id="creditCostOutput">—</strong></div><p id="additionalNote" class="help-note">Simulazione indicativa, non è un preventivo bancario.</p><p id="errorBox" class="error-box" role="alert" hidden></p>
             </section>
             <div class="action-row"><button id="saveSimulation" class="primary-button" type="button">＋ Salva simulazione</button><button id="printSimulation" class="secondary-button" type="button">Stampa / PDF</button></div>
             <section class="panel chart-panel" id="balancePanel"><div class="panel-head"><h2>Debito residuo nel tempo</h2></div><svg id="balanceChart" role="img" aria-label="Andamento del capitale residuo del prestito" viewBox="0 0 330 125" preserveAspectRatio="none"><line x1="5" y1="108" x2="325" y2="108" stroke="#d8deea" stroke-width="1"/><path id="chartArea" fill="#dfecef" d=""/><path id="chartLine" fill="none" stroke="#0f817e" stroke-width="2.5" stroke-linecap="round" d=""/></svg><div class="chart-ends"><span>Oggi</span><span id="chartEndDate">30 anni</span></div></section>
@@ -80,7 +82,8 @@
         </div>
         <section class="panel schedule-panel" id="schedulePanel" hidden><div class="panel-head"><div><h2>Piano di ammortamento</h2><small>Valori indicativi mensili</small></div><button id="csvButton" type="button" class="secondary-button small">Esporta CSV</button></div><div class="table-scroll"><table><thead><tr><th>Rata</th><th>Pagamento</th><th>Interessi</th><th>Capitale</th><th>Residuo</th></tr></thead><tbody id="scheduleBody"></tbody></table></div></section>
       </section>
-      <section id="archivePage" class="page" hidden><div class="section-intro"><div class="eyebrow">IL TUO ARCHIVIO</div><h1>Simulazioni salvate</h1><p>Le simulazioni sono conservate solo nel browser di questo dispositivo. Esegui un backup per non perderle.</p></div><div class="panel archive-tools"><button id="exportBackup" type="button" class="secondary-button">Esporta backup JSON</button><button id="importBackup" type="button" class="secondary-button">Importa backup</button><input id="backupFile" type="file" accept="application/json,.json" hidden></div><div id="savedList" class="saved-list"></div><section class="panel" id="comparePanel" hidden><div class="panel-head"><h2>Confronto salvati</h2><button id="clearCompare" class="text-button">Azzera selezione</button></div><div id="compareTable" class="table-scroll"></div></section></section>
+      <section id="archivePage" class="page" hidden><div class="section-intro"><div class="eyebrow">LE TUE OFFERTE</div><h1>Ogni simulazione,
+sempre a portata di mano.</h1><p>Rivedi, modifica e confronta le simulazioni salvate. Restano sul tuo dispositivo: esporta un backup per conservarle.</p><div class="hero-trust"><span><i></i> Salvate in locale</span><span><i></i> Confronto tra offerte</span></div></div><div class="panel archive-tools"><button id="exportBackup" type="button" class="secondary-button">Esporta backup JSON</button><button id="importBackup" type="button" class="secondary-button">Importa backup</button><input id="backupFile" type="file" accept="application/json,.json" hidden></div><div id="savedList" class="saved-list"></div><section class="panel" id="comparePanel" hidden><div class="panel-head"><h2>Confronto salvati</h2><button id="clearCompare" class="text-button">Azzera selezione</button></div><div id="compareTable" class="table-scroll"></div></section></section>
     </main>
     <nav class="bottom-nav" aria-label="Navigazione"><button class="nav-button active" data-page="calculatorPage"><span>▦</span>Calcolatore</button><button class="nav-button" data-page="archivePage"><span>▤</span>Archivio <b id="archiveCounter">0</b></button></nav>
   </div>
