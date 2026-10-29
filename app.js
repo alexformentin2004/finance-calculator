@@ -92,6 +92,12 @@ function applyTypeIdentity(type){
     const result=Finance.calculate(applied);
     return {result,inputs,maxPrice,loanCapacity,priceAffordability};
   }
+  // Raggruppa più battute nello stesso frame: riduce i ricalcoli durante la digitazione su iPhone.
+  let updateFrame=0;
+  function queueInputUpdate(){
+    if(updateFrame)cancelAnimationFrame(updateFrame);
+    updateFrame=requestAnimationFrame(()=>{updateFrame=0;update();});
+  }
   function update(){
     try{
       syncCurrent();
@@ -103,6 +109,7 @@ function applyTypeIdentity(type){
       const info=compute();state.result=info.result;state.calcInfo=info;renderResult(info);$('errorBox').hidden=true;
       $('saveSimulation').disabled=false;$('printSimulation').disabled=false;$('csvButton').disabled=false;
     }catch(e){state.result=null;state.calcInfo=null;$('errorBox').textContent=e.message;$('errorBox').hidden=false;
+      $('quickResultValue').textContent='—';$('quickResult').disabled=true;
       $('mainMetric').textContent='—';['capitalOutput','upfrontOutput','interestOutput','aprOutput','totalOutput','regularOutput','recurringOutput','creditCostOutput','basePaymentOutput','monthlyFeesOutput','lastPaymentOutput'].forEach(id=>$(id).textContent='—');
       $('saveSimulation').disabled=true;$('printSimulation').disabled=true;$('csvButton').disabled=true;
       $('chartLine').setAttribute('d','');$('chartArea').setAttribute('d','');$('scheduleBody').replaceChildren();
@@ -110,6 +117,9 @@ function applyTypeIdentity(type){
   }
   function renderResult(info){
     const r=info.result, variable=r.type==='mutuo'&&$('rateType').value==='variabile';
+    $('quickResultLabel').textContent=state.solution==='budget'?'Capitale finanziabile':'Rata mensile stimata';
+    $('quickResultValue').textContent=state.solution==='budget'?euro0(r.baseLoan):euro(r.monthlyOutlay);
+    $('quickResult').disabled=false;
     $('mainMetricLabel').textContent=state.solution==='budget'?'Capitale finanziabile con il tuo budget':'Rata mensile';
     $('mainMetric').textContent=state.solution==='budget'?euro0(r.baseLoan):euro(r.monthlyOutlay);
     $('metricSubtitle').textContent=state.solution==='budget'
@@ -218,7 +228,7 @@ function applyTypeIdentity(type){
     window.scrollTo({top:0,behavior:'instant'});
   }
   function install(){
-    for(const input of document.querySelectorAll('.entry-panel input,.entry-panel select'))input.addEventListener('input',()=>{if(input.id==='rateType')applyRateNotice();update();});
+    for(const input of document.querySelectorAll('.entry-panel input,.entry-panel select'))input.addEventListener('input',()=>{if(input.id==='rateType')applyRateNotice();queueInputUpdate();});
     document.querySelectorAll('.type-tab').forEach(b=>b.addEventListener('click',()=>showType(b.dataset.type)));
     document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{setAdvanced(b.dataset.mode==='advanced');update();}));
     $('advancedToggle').addEventListener('click',()=>{setAdvanced(!state.advanced);update();});
@@ -227,6 +237,10 @@ function applyTypeIdentity(type){
     document.querySelectorAll('.nav-button').forEach(b=>b.addEventListener('click',()=>switchPage(b.dataset.page)));
     document.querySelectorAll('[data-open-type]').forEach(b=>b.addEventListener('click',()=>switchPage(b.dataset.openType+'Page')));
     $('backHome').addEventListener('click',()=>switchPage('homePage'));
+    $('quickResult').addEventListener('click',()=>{
+      if(!state.result)return;
+      $('results').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    });
     $('openArchive').addEventListener('click',()=>switchPage('archivePage'));
     $('backFromArchive').addEventListener('click',()=>switchPage('homePage'));
     $('showSchedule').addEventListener('click',()=>{$('schedulePanel').hidden=!$('schedulePanel').hidden;if(!$('schedulePanel').hidden&&state.result){renderSchedule(state.result);$('schedulePanel').scrollIntoView({behavior:'smooth',block:'start'});} });
@@ -247,7 +261,7 @@ function applyTypeIdentity(type){
     window.addEventListener('online',()=>{$('connection').innerHTML='● <span>Solo sul dispositivo</span>';});
     window.addEventListener('offline',()=>{$('connection').innerHTML='● <span>Offline</span>';});
     if(!navigator.onLine)$('connection').innerHTML='● <span>Offline</span>';
-    if('serviceWorker' in navigator&&location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js?v=6.0.0',{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{}));
+    if('serviceWorker' in navigator&&location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js?v=7.0.0',{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{}));
     restoreInputs(state.typeInputs.mutuo);setAdvanced(false);showType('mutuo');renderArchive();switchPage('homePage');
   }
   install();
