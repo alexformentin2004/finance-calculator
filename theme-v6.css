@@ -1,0 +1,235 @@
+/* Finance Calculator 6.0 — clean, natural, mobile-first.
+   Original design: neutral surfaces, restrained colour, clear navigation. */
+:root{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  --ink:#191b20;--muted:#75787f;--stroke:#e8e9ec;--paper:#fff;
+  --accent:#3d5ce9;--accent-soft:#edf0ff;--accent-border:#dadfff;
+  --shadow:none;color-scheme:light;
+}
+html{background:#fff}
+body{background:#fff;color:var(--ink);font-family:inherit;min-width:320px;font-size:15px;line-height:1.45}
+body[data-finance-type="auto"],body[data-finance-type="prestito"]{
+  --accent:#3d5ce9;--accent-soft:#edf0ff;--accent-border:#dadfff
+}
+button,input,select{font:inherit}
+button{transition:background-color .12s ease,transform .12s ease}
+button:active:not(:disabled){transform:scale(.99)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #bcc9ff;outline-offset:2px}
+main{padding-bottom:38px}
+.app-shell{max-width:1080px;padding:0 28px}
+.topbar{height:87px;border-bottom:1px solid #f0f0f1;position:relative;display:flex;align-items:center;justify-content:space-between}
+.brand{gap:11px}
+.brand-mark{height:41px;width:41px;border-radius:12px;background:#191b20;color:#fff;box-shadow:none;font-size:24px}
+.brand strong{font-size:16px;letter-spacing:-.45px;font-weight:790;color:#18191e}
+.brand small{font-size:11px;letter-spacing:0;color:#8c8e94;margin-top:3px;font-weight:500}
+.connection{display:inline-flex;gap:6px;align-items:center;border:none;background:#f6f7f8;color:#737a81;font-size:11px;font-weight:660;padding:8px 12px;border-radius:50px}
+.connection::first-letter{color:#2fbe87}
+.version-badge{display:none}
+.page{animation:fc-reveal .18s ease-out}
+@keyframes fc-reveal{from{opacity:.5;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+.page[hidden]{display:none!important}
+/* Only four links on the home screen. */
+.simple-home{max-width:800px;margin:0 auto;padding:69px 0 32px}
+.home-heading{margin-bottom:32px}
+.home-kicker{display:block;color:#90939a;font-weight:740;letter-spacing:1.7px;font-size:10px}
+.home-heading h1{font-size:clamp(32px,4.5vw,46px);line-height:1.09;font-weight:790;letter-spacing:-1.9px;margin:15px 0 10px;color:#191a20}
+.home-heading p{font-size:15px;line-height:1.55;color:#767a82;margin:0}
+.home-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.home-action{display:flex;align-items:center;text-align:left;gap:16px;width:100%;padding:22px 19px;min-height:112px;border:1px solid transparent;border-radius:19px;background:#f5f5f6;color:#1b1d23;box-shadow:none}
+.home-action:hover{background:#efeff1}
+.home-action:focus-visible{outline-offset:2px}
+.product-icon{display:grid;place-items:center;flex:0 0 49px;width:49px;height:49px;background:#e7e7e9;color:#25272d;border-radius:15px}
+.product-icon svg{width:24px;height:24px;stroke-width:1.8}
+.product-icon.icon-mortgage,.product-icon.icon-car,.product-icon.icon-loan,.product-icon.icon-archive{
+  color:#2c2e33;background:#e5e5e8
+}
+.home-action-copy{display:flex;flex-direction:column;min-width:0;gap:5px;flex:1}
+.home-action-copy strong{font-size:17px;font-weight:760;color:#202126;letter-spacing:-.35px}
+.home-action-copy small{font-size:11px;color:#7d8087;line-height:1.4;max-width:220px}
+.home-action-chevron{display:grid;place-items:center;color:#a7a8ae;flex:0 0 auto}
+.home-action-chevron svg{height:18px;width:18px;stroke-width:2}
+.home-action:hover .home-action-chevron{color:#54555b}
+#homePage .home-hero,#homePage .home-lower,#homePage .section-heading,#homePage .product-cards{display:none!important}
+/* Calculator screen and title */
+.calc-route-head{border:0;background:#fff;padding:31px 0 26px;margin:0;border-radius:0;box-shadow:none;overflow:visible}
+.calc-route-head:after{display:none}
+.calc-breadcrumb{display:flex;align-items:center;gap:8px;color:#a0a2a8;font-size:12px}
+.back-home{border:0;background:none;color:#666972;font-size:12px;font-weight:670;display:inline-flex;gap:7px;align-items:center;padding:8px 3px 8px 0}
+.back-home svg{height:15px;width:15px;transform:rotate(180deg)}
+.back-home:hover{color:#16191e}
+.crumb-sep{color:#c7c8cd}
+.calc-title-row{align-items:center;display:flex;justify-content:space-between;gap:15px;margin-top:18px}
+.calc-title-row .small-eyebrow{display:none}
+.calc-title-row h1{font-size:clamp(28px,4vw,39px);font-weight:800;letter-spacing:-1.35px;margin:0 0 6px;color:#17191f;line-height:1.14}
+.calc-title-row p{font-size:12px;color:#7f8289;margin:0;max-width:640px;line-height:1.65}
+.calc-big-icon{width:56px;height:56px;border-radius:17px;color:#31333b;background:#f1f1f3;flex:0 0 auto;display:grid;place-items:center}
+.calc-big-icon.icon-car,.calc-big-icon.icon-loan{color:#31333b;background:#f1f1f3}
+.calc-big-icon svg{width:27px;height:27px;stroke-width:1.75}
+.calc-feature-pills{display:none}
+#calculatorPage>.section-intro{display:none}
+#calculatorPage .type-tabs{display:none}
+.layout-columns{grid-template-columns:minmax(0,1.03fr) minmax(0,.97fr);gap:20px;align-items:start}
+.result-col{position:sticky;top:14px}
+.panel{border:1px solid #eeeeef;background:#fff;border-radius:17px;box-shadow:none;margin-bottom:16px}
+.entry-panel,.focus-panel,.chart-panel,.schedule-panel{padding:23px}
+.panel-head{align-items:center;margin-bottom:19px;gap:10px}
+.panel-head h2{font-size:15px;font-weight:780;letter-spacing:-.2px;color:#2b2d34}
+.panel-head small{font-size:11px;color:#92949b}
+.mode-switch,.micro-switch{display:inline-flex;padding:3px;gap:2px;background:#f2f2f3;border-radius:10px}
+.mode-switch button,.micro-switch button{font-size:11px;font-weight:710;color:#777b83;border:0;border-radius:8px;padding:8px 10px;background:transparent}
+.mode-switch button.active,.micro-switch button.active{background:#fff;color:#26272c;box-shadow:0 1px 3px #10121a1e}
+.fields{gap:17px 12px}
+.field{gap:7px}
+.field>span:first-child,.field-label>label{font-size:12px;font-weight:700;color:#585b63}
+.input-unit{height:53px;background:#f7f7f8;border:1px solid transparent;border-radius:11px}
+.input-unit:focus-within{background:#fff;border:1.5px solid #9da6d1;box-shadow:0 0 0 3px #5167e70e}
+.input-unit input{color:#202126;font-size:17px;font-weight:730;letter-spacing:-.25px;padding:11px 14px}
+.input-unit b{color:#777a82;font-size:11px;font-weight:740;background:#efeff1;border-color:#f3f3f4;padding:0 12px}
+.field select,.field>input{height:53px;border:1px solid transparent;border-radius:11px;background:#f7f7f8;color:#22252b;padding:0 12px}
+.field-hint,.help-note{font-size:11px;color:#8e9198;line-height:1.6}
+.subheading{border-color:#eeeeef;margin-top:22px;padding-top:20px}
+.subheading h3{font-size:13px;font-weight:760}
+.subheading small{font-size:11px;color:#8e9198}
+.advanced-toggle-wrap{margin:18px -23px -7px}
+.text-button{font-size:12px;font-weight:720;color:#484d7d;padding:10px 13px}
+.text-button:hover{background:#f3f3f4}
+.focus-panel{padding:20px 23px}
+.focus-panel .panel-head{margin-bottom:13px}
+.solution-modes{grid-template-columns:1fr 1fr;gap:9px}
+.solution{background:#f8f8f9;border:1px solid transparent;min-height:77px;padding:14px;border-radius:12px}
+.solution.active{background:#f0f1fb;border:1px solid #d6d8ec}
+.solution strong{font-size:12px;font-weight:740;color:#3a3c44}
+.solution.active strong{color:#252943}
+.solution small{font-size:11px;color:#8a8c92}
+/* Results: large value in an unadorned surface rather than gradients. */
+.results-panel{padding:22px;background:#fff;color:#1d1e24;border:1px solid #ededee;border-radius:17px;box-shadow:none;overflow:visible}
+.results-panel:before{display:none}
+.result-heading{color:#84878e;font-size:10px;letter-spacing:.75px;font-weight:760}
+.type-pill{background:#f2f2f3;color:#575963;border:1px solid #ececef;border-radius:8px;font-size:9px;letter-spacing:.5px;padding:6px 9px}
+.main-metric{padding:23px 20px 22px;margin:17px 0;background:#f5f5f6;color:#202126;border-radius:13px;text-align:left}
+.main-metric>div:first-child{color:#7a7d85;font-size:11px;font-weight:670;text-transform:none;letter-spacing:0}
+.main-metric>div:nth-child(2){color:#191a20;font-size:clamp(35px,4vw,49px);font-weight:800;letter-spacing:-2px;line-height:1.12;margin:7px 0;overflow-wrap:anywhere}
+.main-metric>div:last-child{color:#858890;font-size:11px}
+.payment-details{display:none}
+.result-kpis{padding:0 0 14px;gap:9px;border:0;display:grid;grid-template-columns:1fr 1fr}
+.result-kpis>div{padding:12px;border-radius:11px;background:#fafafa;border:1px solid #f0f0f1;gap:5px}
+.result-kpis span{font-size:10px;color:#858890}
+.result-kpis strong{font-size:16px;font-weight:780;letter-spacing:-.3px;color:#2b2c31;overflow-wrap:anywhere}
+.breakdown-strip{padding:13px 2px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;background:#fff;border:1px solid #ededee;border-radius:11px;margin-bottom:13px}
+.breakdown-strip>div{padding:0 9px;background:none;border:0;border-radius:0;min-width:0}
+.breakdown-strip>div+div{border-left:1px solid #eeeeef}
+.breakdown-strip span{display:block;font-size:10px;color:#8d9096;line-height:1.35;margin-bottom:7px}
+.breakdown-strip strong{display:block;font-size:12px;color:#383a42;font-weight:760;overflow-wrap:anywhere}
+.distribution{padding-top:13px}
+.bar-label{font-size:11px;color:#878a91;font-weight:720}
+.distbar{height:8px;background:#f0f0f2}
+.capital-part,.bullet.capital{background:#595e82}
+.interest-part,.bullet.interest{background:#adb2c0}
+.fee-part,.bullet.fees{background:#d9dbe2}
+.bar-legend{font-size:10px;color:#94969c;gap:12px}
+.total-row{border-top:1px solid #f0f0f1;padding-top:17px;margin-top:17px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.total-row small{color:#868990;font-size:10px}
+.total-row strong{font-size:22px;font-weight:820;color:#24262c;letter-spacing:-.7px}
+.results-panel .secondary-button{background:#f4f4f5;color:#42444b;border:1px solid #efeff0}
+.results-panel .secondary-button:hover{background:#ededee}
+.credit-cost-row{border-color:#efeff1;color:#858991;font-size:10px;padding-top:13px}
+.credit-cost-row strong{font-size:12px;color:#3e4048}
+.results-panel>.help-note{color:#9699a1;font-size:10px;margin-top:16px}
+.balloon-note{background:#faf7ef;border:1px solid #ece3ce;color:#7a6535!important;padding:12px 13px;border-radius:10px;font-size:11px}
+.error-box{background:#fdf5f5;color:#9c383c;border-radius:10px}
+.action-row{gap:9px;margin-bottom:15px}
+.primary-button,.secondary-button{border-radius:11px;min-height:46px;padding:11px 14px;font-size:12px;font-weight:750}
+.primary-button{background:#222328;color:#fff;border:1px solid #222328;box-shadow:none}
+.primary-button:hover{background:#41434a}
+.secondary-button{color:#34363e;background:#f5f5f6;border:1px solid #eeeff0}
+.secondary-button:hover{background:#ebebed}
+.chart-panel svg{height:147px}
+.chart-panel .panel-head h2{color:#292b32}
+.chart-panel #chartLine{stroke:#51577b}
+.chart-panel #chartArea{fill:#f0f0f5}
+.chart-ends{color:#92959c;font-size:11px}
+.schedule-panel .panel-head{align-items:center}
+.table-scroll{border:1px solid #efeff0;border-radius:11px;overflow-x:auto}
+th{background:#f7f7f8;color:#777b83;font-size:10px;font-weight:760;position:sticky;top:0}
+td,th{padding:12px 11px;border-bottom:1px solid #f0f0f1}
+tbody tr:hover{background:#fafafa}
+tbody tr:nth-child(even){background:#fafafa}
+/* Archive */
+.archive-return{padding-top:24px}
+#archivePage .section-intro{padding:19px 0 22px;margin:0;background:none;border:none;box-shadow:none;border-radius:0}
+#archivePage .section-intro:before,#archivePage .section-intro:after{display:none}
+#archivePage .eyebrow{color:#93959b;font-size:10px;letter-spacing:1.2px}
+#archivePage .section-intro h1{color:#21232a;font-size:clamp(28px,4vw,38px);margin:10px 0 9px;font-weight:810;letter-spacing:-1.3px}
+#archivePage .section-intro h1 em{color:inherit;font-style:normal}
+#archivePage .section-intro p{color:#83868d;font-size:12px;max-width:650px;line-height:1.6}
+#archivePage .hero-trust{display:none}
+.archive-tools{background:#fff;border:none;box-shadow:none;padding:0;display:flex;gap:8px;flex-wrap:wrap;margin-bottom:19px}
+.saved-list{gap:10px}
+.saved-card{padding:18px;border-radius:14px;box-shadow:none;border:1px solid #ededee;background:#fff;grid-template-columns:1fr auto}
+.saved-card:before{display:none}
+.saved-card h3{color:#292c34;font-size:15px;font-weight:790;letter-spacing:-.2px}
+.saved-card p{color:#94969d;font-size:11px}
+.saved-card strong{color:#2e3038;font-size:19px}
+.saved-card .saved-actions{gap:6px}
+.saved-card .saved-actions button{border:1px solid #efeff1;background:#f8f8f9;color:#565a63;border-radius:9px;font-size:11px;font-weight:720}
+.saved-card .saved-actions .danger-button{color:#ac4b51!important;background:#fdf7f7}
+.saved-check{font-size:11px;color:#868b92}
+.saved-check input{accent-color:#454756}
+.empty-state{background:#fafafa;border:1px dashed #dedfe2;border-radius:14px;padding:38px 20px;color:#92949b}
+.empty-state strong{color:#30323a}
+.modal{border-radius:17px;box-shadow:0 23px 62px #20222735;border-color:#e5e5e7}
+.modal h2{color:#23252b}
+.modal p{color:#878b92}
+.toast{background:#25262c;color:#fff;border-radius:10px;bottom:calc(32px + env(safe-area-inset-bottom));font-size:12px;padding:12px 16px}
+.bottom-nav{display:none!important}
+@media(max-width:760px){
+ .app-shell{padding:0 19px}
+ .topbar{height:73px}
+ .simple-home{padding-top:55px}
+ .home-actions{grid-template-columns:1fr;gap:10px}
+ .home-action{min-height:92px;padding:16px;border-radius:17px}
+ .home-heading{margin-bottom:25px}
+ .home-heading h1{font-size:36px;letter-spacing:-1.3px}
+ .home-action-copy strong{font-size:17px}
+ .layout-columns{display:block}
+ .result-col{position:static}
+ .calc-route-head{padding:24px 0 19px}
+ .entry-panel,.focus-panel,.chart-panel,.schedule-panel{padding:20px}
+ .advanced-toggle-wrap{margin-left:-20px;margin-right:-20px}
+ .panel{margin-bottom:13px;border-radius:16px}
+ .results-panel{padding:20px}
+ main{padding-bottom:50px}
+}
+@media(max-width:440px){
+ .app-shell{padding:0 15px}
+ .topbar{height:68px}
+ .brand strong{font-size:15px}
+ .brand small{font-size:10px}
+ .brand-mark{height:37px;width:37px;border-radius:11px;font-size:22px}
+ .connection{width:30px;height:30px;padding:0;display:grid;place-items:center;font-size:0}
+ .connection::first-letter{font-size:13px}
+ .connection span{display:none}
+ .simple-home{padding-top:47px}
+ .home-heading h1{font-size:32px;letter-spacing:-1px}
+ .home-heading p{font-size:13px}
+ .home-action{min-height:88px;padding:14px;gap:13px}
+ .product-icon{height:45px;width:45px;flex-basis:45px;border-radius:13px}
+ .product-icon svg{width:23px;height:23px}
+ .home-action-copy strong{font-size:16px}
+ .home-action-copy small{font-size:11px}
+ .calc-title-row h1{font-size:31px}
+ .calc-big-icon{height:49px;width:49px;border-radius:14px}
+ .calc-title-row p{font-size:11px}
+ .result-kpis{grid-template-columns:1fr 1fr}
+ .result-kpis strong{font-size:16px}
+ .main-metric>div:nth-child(2){font-size:38px}
+ .total-row strong{font-size:19px}
+ .total-row .secondary-button{font-size:10px;padding:9px;min-height:39px}
+ .breakdown-strip{grid-template-columns:1fr 1fr}
+ .breakdown-strip>div:last-child{grid-column:1/-1;border-left:0;border-top:1px solid #ededee;padding-top:10px;margin-top:10px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+ .breakdown-strip>div:last-child span{margin-bottom:0}
+ .saved-card{grid-template-columns:1fr;gap:9px}
+ .saved-card .saved-actions{flex-direction:row;justify-content:flex-start;flex-wrap:wrap}
+}
+@media(prefers-reduced-motion:reduce){.page{animation:none}button{transition:none}}
+@media print{body{background:white}.app-shell,dialog,.toast{display:none!important}.print-report{display:block}}
