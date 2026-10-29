@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f6f8fc">
+  <meta name="description" content="Calcola mutui, prestiti e finanziamenti auto senza registrarti. Simulazioni offline e archivio locale.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Finance Calc">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="./icons/icon-192.png">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./style.css">
+  <title>Finance Calculator · Simulazioni personali</title>
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <header class="topbar">
+      <div class="brand"><div class="brand-mark" aria-hidden="true">€</div><div><strong>Finance Calculator</strong><small>Il tuo simulatore personale</small></div></div>
+      <div id="connection" class="connection">● <span>Solo sul dispositivo</span></div>
+    </header>
+    <main>
+      <section id="calculatorPage" class="page">
+        <div class="section-intro"><div class="eyebrow">NUOVA SIMULAZIONE</div><h1>Quanto ti costerà davvero?</h1><p>Confronta le rate, gli interessi e il costo totale. Nessun account, nessun preventivo.</p></div>
+        <div class="type-tabs" role="tablist" aria-label="Tipo di finanziamento">
+          <button class="type-tab active" data-type="mutuo" role="tab" aria-selected="true"><span class="type-icon">⌂</span> Mutuo</button>
+          <button class="type-tab" data-type="auto" role="tab" aria-selected="false"><span class="type-icon">▰</span> Auto</button>
+          <button class="type-tab" data-type="prestito" role="tab" aria-selected="false"><span class="type-icon">€</span> Prestito</button>
+        </div>
+        <div class="layout-columns">
+          <div class="entry-col">
+            <section class="panel entry-panel" aria-label="Parametri finanziamento">
+              <div class="panel-head"><h2>Parametri del finanziamento</h2><div class="mode-switch" role="group" aria-label="Dettagli"><button class="active" data-mode="basic" type="button">Base</button><button data-mode="advanced" type="button">Avanzato</button></div></div>
+              <div class="fields">
+                <label class="field full"><span id="priceLabel">Prezzo dell'immobile</span><div class="input-unit"><input id="price" type="text" inputmode="decimal" autocomplete="off" value="190000"><b>€</b></div></label>
+                <div id="downWrap" class="field full"><div class="field-label"><label for="downValue">Anticipo</label><div class="micro-switch" role="group" aria-label="Unità anticipo"><button class="active" data-down-mode="percent" type="button">%</button><button data-down-mode="euro" type="button">€</button></div></div><div class="input-unit"><input id="downValue" type="text" inputmode="decimal" autocomplete="off" value="10"><b id="downUnit">%</b></div><div id="downHint" class="field-hint">19.000 € di anticipo · 90% finanziato</div></div>
+                <label class="field"><span>TAN annuo</span><div class="input-unit"><input id="annualRate" type="text" inputmode="decimal" value="3,50"><b>%</b></div></label>
+                <label class="field"><span>Durata</span><div class="input-unit"><input id="years" type="text" inputmode="decimal" value="30"><b>anni</b></div></label>
+                <label class="field full" id="budgetWrap" hidden><span>Rata massima desiderata</span><div class="input-unit"><input id="targetMonthly" type="text" inputmode="decimal" value="700"><b>€/mese</b></div></label>
+              </div>
+              <div class="advanced" id="advancedFields" hidden>
+                <div class="subheading"><h3>Costi e condizioni</h3><small>Compila solo le spese che conosci</small></div>
+                <div class="fields">
+                  <label class="field"><span>Spese finanziate</span><div class="input-unit"><input id="financedFees" inputmode="decimal" type="text" value="0"><b>€</b></div></label>
+                  <label class="field"><span>Spese iniziali del credito</span><div class="input-unit"><input id="upfrontCreditFees" inputmode="decimal" type="text" value="0"><b>€</b></div></label>
+                  <label class="field"><span>Spese per rata</span><div class="input-unit"><input id="monthlyFees" inputmode="decimal" type="text" value="0"><b>€</b></div></label>
+                  <label class="field"><span>Altre spese iniziali</span><div class="input-unit"><input id="otherUpfrontFees" inputmode="decimal" type="text" value="0"><b>€</b></div></label>
+                </div>
+                <p class="help-note">Spese iniziali del credito e spese per rata entrano nella stima del costo del credito; altre spese iniziali (es. notaio) sono conteggiate nell'esborso, ma non nel TAEG stimato.</p>
+                <div id="mortgageAdvanced" class="extra-fields">
+                  <div class="fields"><label class="field"><span>Valore di perizia</span><div class="input-unit"><input id="appraisal" inputmode="decimal" type="text" value="190000"><b>€</b></div></label>
+                    <label class="field"><span>Tipo di tasso</span><select id="rateType"><option value="fisso">Fisso</option><option value="variabile">Variabile (scenario)</option></select></label></div>
+                  <p id="variableNotice" class="help-note" hidden>Il TAN indicato viene tenuto costante come scenario. Non è una previsione dei tassi futuri: la rata effettiva di un variabile può cambiare.</p>
+                </div>
+                <div id="autoAdvanced" class="extra-fields" hidden>
+                  <div class="fields"><label class="field"><span>Sconto concessionaria</span><div class="input-unit"><input id="discount" inputmode="decimal" type="text" value="0"><b>€</b></div></label>
+                    <label class="field"><span>Valore della permuta</span><div class="input-unit"><input id="tradeIn" inputmode="decimal" type="text" value="0"><b>€</b></div></label>
+                    <label class="field full"><span>Maxi rata finale</span><div class="input-unit"><input id="balloon" inputmode="decimal" type="text" value="0"><b>€</b></div><span class="field-hint">È dovuta alla scadenza, oltre alla rata periodica indicata.</span></label>
+                  </div>
+                </div>
+              </div>
+              <div class="advanced-toggle-wrap"><button id="advancedToggle" class="text-button" type="button">Mostra tutti i costi <span aria-hidden="true">⌄</span></button></div>
+            </section>
+            <section class="panel focus-panel"><div class="panel-head"><h2>Tipo di calcolo</h2></div><div class="solution-modes"><button class="solution active" data-solution="rata"><strong>Calcola la rata</strong><small>Parti dall'importo</small></button><button class="solution" data-solution="budget"><strong>Rata-obiettivo</strong><small>Parti dal budget</small></button></div><p id="budgetExplanation" class="help-note" hidden>Stima del capitale massimo finanziabile a rata e durata date. Non costituisce una valutazione di affidabilità creditizia.</p></section>
+          </div>
+          <div class="result-col">
+            <section id="results" class="results-panel panel" aria-live="polite">
+              <div class="result-heading"><span>LA TUA SIMULAZIONE</span><span id="resultTypeBadge" class="type-pill">MUTUO</span></div>
+              <div class="main-metric"><div id="mainMetricLabel">Rata mensile</div><div id="mainMetric">—</div><div id="metricSubtitle">TAN 3,50% · 360 rate</div></div>
+              <div class="result-kpis"><div><span>Capitale finanziato</span><strong id="capitalOutput">—</strong></div><div><span>Anticipo / liquidità iniziale</span><strong id="upfrontOutput">—</strong></div><div><span>Interessi totali</span><strong id="interestOutput">—</strong></div><div><span>TAEG stimato</span><strong id="aprOutput">—</strong></div></div>
+              <div class="distribution"><div class="bar-label">Composizione delle rate</div><div class="distbar"><div id="capitalBar" class="capital-part"></div><div id="interestBar" class="interest-part"></div><div id="feeBar" class="fee-part"></div></div><div class="bar-legend"><span><i class="bullet capital"></i> Capitale</span><span><i class="bullet interest"></i> Interessi</span><span><i class="bullet fees"></i> Spese</span></div></div>
+              <div class="total-row"><div><small>Esborso complessivo</small><strong id="totalOutput">—</strong></div><button id="showSchedule" class="secondary-button" type="button">Piano rate ↓</button></div>
+              <p id="balloonNote" class="balloon-note" hidden></p><p id="additionalNote" class="help-note">Simulazione indicativa, non è un preventivo bancario.</p><p id="errorBox" class="error-box" role="alert" hidden></p>
+            </section>
+            <div class="action-row"><button id="saveSimulation" class="primary-button" type="button">＋ Salva simulazione</button><button id="printSimulation" class="secondary-button" type="button">Stampa / PDF</button></div>
+            <section class="panel chart-panel" id="balancePanel"><div class="panel-head"><h2>Debito residuo nel tempo</h2></div><svg id="balanceChart" role="img" aria-label="Andamento del capitale residuo del prestito" viewBox="0 0 330 125" preserveAspectRatio="none"><line x1="5" y1="108" x2="325" y2="108" stroke="#d8deea" stroke-width="1"/><path id="chartArea" fill="#dfecef" d=""/><path id="chartLine" fill="none" stroke="#0f817e" stroke-width="2.5" stroke-linecap="round" d=""/></svg><div class="chart-ends"><span>Oggi</span><span id="chartEndDate">30 anni</span></div></section>
+          </div>
+        </div>
+        <section class="panel schedule-panel" id="schedulePanel" hidden><div class="panel-head"><div><h2>Piano di ammortamento</h2><small>Valori indicativi mensili</small></div><button id="csvButton" type="button" class="secondary-button small">Esporta CSV</button></div><div class="table-scroll"><table><thead><tr><th>Rata</th><th>Pagamento</th><th>Interessi</th><th>Capitale</th><th>Residuo</th></tr></thead><tbody id="scheduleBody"></tbody></table></div></section>
+      </section>
+      <section id="archivePage" class="page" hidden><div class="section-intro"><div class="eyebrow">IL TUO ARCHIVIO</div><h1>Simulazioni salvate</h1><p>Le simulazioni sono conservate solo nel browser di questo dispositivo. Esegui un backup per non perderle.</p></div><div class="panel archive-tools"><button id="exportBackup" type="button" class="secondary-button">Esporta backup JSON</button><button id="importBackup" type="button" class="secondary-button">Importa backup</button><input id="backupFile" type="file" accept="application/json,.json" hidden></div><div id="savedList" class="saved-list"></div><section class="panel" id="comparePanel" hidden><div class="panel-head"><h2>Confronto salvati</h2><button id="clearCompare" class="text-button">Azzera selezione</button></div><div id="compareTable" class="table-scroll"></div></section></section>
+    </main>
+    <nav class="bottom-nav" aria-label="Navigazione"><button class="nav-button active" data-page="calculatorPage"><span>▦</span>Calcolatore</button><button class="nav-button" data-page="archivePage"><span>▤</span>Archivio <b id="archiveCounter">0</b></button></nav>
+  </div>
+  <dialog id="saveDialog" class="modal"><form method="dialog"><h2>Salva la simulazione</h2><p>Assegna un nome per ritrovarla nell'archivio.</p><label class="field full"><span>Nome simulazione</span><input id="simulationName" type="text" maxlength="70" placeholder="Es. Mutuo prima casa 90%"></label><div class="modal-actions"><button type="submit" value="cancel" class="secondary-button">Annulla</button><button type="submit" value="save" class="primary-button">Salva</button></div></form></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <div class="print-report"><h1>Finance Calculator – simulazione</h1><p id="printSummary"></p><p>Le simulazioni sono puramente indicative, non costituiscono offerta o consulenza finanziaria.</p></div>
+  <script src="./finance.js" defer></script>
+  <script src="./app.js" defer></script>
+</body>
+</html>
