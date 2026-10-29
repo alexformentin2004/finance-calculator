@@ -1,0 +1,11 @@
+const assert=require('assert'), F=require('./finance.js');
+const r=F.calculate({type:'mutuo',price:190000,cashDown:19000,annualRate:3.5,months:360});
+assert(Math.abs(r.regular-767.86)<0.02);
+assert(Math.abs(r.schedule.at(-1).balance)<0.001);
+const zero=F.calculate({type:'prestito',price:12000,annualRate:0,months:12});
+assert(Math.abs(zero.regular-1000)<0.0001);
+const car=F.calculate({type:'auto',price:25000,cashDown:5000,balloon:10000,annualRate:5,months:48});
+assert(car.regular>0&&car.schedule.at(-1).payment>car.regular);
+const b=F.affordablePrincipal(r.monthlyOutlay,3.5,360);
+assert(Math.abs(b-r.principal)<0.1);
+console.log('OK: mutuo, tasso zero, maxi rata, rata-obiettivo.');
