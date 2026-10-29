@@ -212,7 +212,7 @@
     window.addEventListener('online',()=>{$('connection').innerHTML='● <span>Solo sul dispositivo</span>';});
     window.addEventListener('offline',()=>{$('connection').innerHTML='● <span>Offline</span>';});
     if(!navigator.onLine)$('connection').innerHTML='● <span>Offline</span>';
-    if('serviceWorker' in navigator&&location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js?v=3.0.0',{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{}));
+    if('serviceWorker' in navigator&&location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js?v=4.0.0',{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{}));
     restoreInputs(state.typeInputs.mutuo);setAdvanced(false);showType('mutuo');renderArchive();
   }
   install();
