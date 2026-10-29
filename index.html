@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="theme-color" content="#eef2f8">
   <meta name="description" content="Calcola mutui, prestiti e finanziamenti auto senza registrarti. Simulazioni offline e archivio locale.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -12,8 +12,9 @@
   <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
   <link rel="icon" type="image/svg+xml" href="./icons/icon-192.svg">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="stylesheet" href="./style.css?v=6.0.0">
-  <link rel="stylesheet" href="./theme-v6.css?v=6.0.0">
+  <link rel="stylesheet" href="./style.css?v=7.0.0">
+  <link rel="stylesheet" href="./theme-v6.css?v=7.0.0">
+  <link rel="stylesheet" href="./theme-v7.css?v=7.0.0">
   <title>Finance Calculator · Mutuo, Auto, Prestito</title>
 </head>
 <body data-finance-type="mutuo">
@@ -58,6 +59,10 @@
 <div class="calc-route-head">
   <div class="calc-breadcrumb"><button id="backHome" type="button" class="back-home"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 14 0m-6-6 6 6-6 6"/></svg> Tutti i calcolatori</button><span class="crumb-sep">/</span><span id="routeName">Mutuo</span></div>
   <div class="calc-title-row"><div><span id="calcEyebrow" class="small-eyebrow">CASA</span><h1 id="calcPageTitle">Mutuo</h1><p id="calcPageDescription">Calcola la rata e confronta i costi del tuo mutuo.</p></div><span id="calcCategoryIcon" class="calc-big-icon icon-mortgage"><svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg></span></div>
+  <button id="quickResult" class="quick-result" type="button" aria-label="Vai al riepilogo del finanziamento">
+    <span class="quick-result-text"><small id="quickResultLabel">Rata mensile stimata</small><strong id="quickResultValue">—</strong></span>
+    <span class="quick-result-action">Vedi dettagli <span aria-hidden="true">↗</span></span>
+  </button>
   </div>
         <div class="layout-columns">
           <div class="entry-col">
@@ -118,7 +123,7 @@
   <dialog id="saveDialog" class="modal"><form method="dialog"><h2>Salva la simulazione</h2><p>Assegna un nome per ritrovarla nell'archivio.</p><label class="field full"><span>Nome simulazione</span><input id="simulationName" type="text" maxlength="70" placeholder="Es. Mutuo prima casa 90%"></label><div class="modal-actions"><button type="submit" value="cancel" class="secondary-button">Annulla</button><button type="submit" value="save" class="primary-button">Salva</button></div></form></dialog>
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
   <div class="print-report"><h1>Finance Calculator – simulazione</h1><p id="printSummary"></p><p>Le simulazioni sono puramente indicative, non costituiscono offerta o consulenza finanziaria.</p></div>
-  <script src="./finance.js?v=6.0.0" defer></script>
-  <script src="./app.js?v=6.0.0" defer></script>
+  <script src="./finance.js?v=7.0.0" defer></script>
+  <script src="./app.js?v=7.0.0" defer></script>
 </body>
 </html>
