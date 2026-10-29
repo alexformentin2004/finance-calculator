@@ -30,7 +30,24 @@
   function setDownMode(mode,convert){const field=$('downValue');if(convert){const current=parse(field.value),price=parse($('price').value);field.value=mode==='percent' ? String(price>0 ? Math.round(current/price*10000)/100 : 0).replace('.',',') : String(Math.round(price*current/100*100)/100).replace('.',',');}
     document.querySelectorAll('[data-down-mode]').forEach(b=>b.classList.toggle('active',b.dataset.downMode===mode));$('downUnit').textContent=mode==='percent'?'%':'€';
   }
-  function showType(next){syncCurrent();state.type=next;document.body.dataset.financeType=next;restoreInputs(state.typeInputs[next]);document.querySelectorAll('.type-tab').forEach(b=>{const is=b.dataset.type===next;b.classList.toggle('active',is);b.setAttribute('aria-selected',String(is));});
+const routeInfo={
+  mutuo:{title:"Mutuo",eyebrow:"CASA",description:"Tutte le cifre per la tua prossima casa. Anticipo, rata, interessi e piano di rimborso.",features:["Anticipo e perizia","TAN fisso o scenario","Piano completo"],iconClass:"icon-mortgage"},
+  auto:{title:"Finanziamento auto",eyebrow:"MOBILITÀ",description:"Valuta il costo reale dell'auto: rata, anticipo, permuta e maxi rata finale.",features:["Sconto e permuta","Maxi rata finale","Costo totale"],iconClass:"icon-car"},
+  prestito:{title:"Prestito personale",eyebrow:"LIQUIDITÀ",description:"Simula un prestito, confronta rate e spese e scopri il capitale sostenibile.",features:["Importo desiderato","Spese accessorie","Rata o budget"],iconClass:"icon-loan"}
+};
+function applyTypeIdentity(type){
+  const info=routeInfo[type];
+  $('routeName').textContent=info.title;
+  $('calcEyebrow').textContent=info.eyebrow;
+  $('calcPageTitle').textContent=info.title;
+  $('calcPageDescription').textContent=info.description;
+  const icon=$('calcCategoryIcon');
+  icon.className='calc-big-icon '+info.iconClass;
+  const source=document.querySelector('[data-open-type="'+type+'"] .product-icon');
+  if(source)icon.innerHTML=source.innerHTML;
+  ['feature1','feature2','feature3'].forEach((id,i)=>$(id).textContent=info.features[i]);
+}
+  function showType(next){syncCurrent();state.type=next;document.body.dataset.financeType=next;applyTypeIdentity(next);restoreInputs(state.typeInputs[next]);document.querySelectorAll('.type-tab').forEach(b=>{const is=b.dataset.type===next;b.classList.toggle('active',is);b.setAttribute('aria-selected',String(is));});
     $('downWrap').hidden=next==='prestito';$('priceLabel').textContent=next==='mutuo'?"Prezzo dell'immobile":next==='auto'?'Prezzo auto':'Importo da ricevere';$('mortgageAdvanced').hidden=next!=='mutuo';$('autoAdvanced').hidden=next!=='auto';$('resultTypeBadge').textContent=next.toUpperCase();applyRateNotice();update();}
   function applyRateNotice(){$('variableNotice').hidden=!(state.type==='mutuo'&&$('rateType').value==='variabile');}
   function setAdvanced(active){state.advanced=active;$('advancedFields').hidden=!active;document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode===(active?'advanced':'basic')));$('advancedToggle').textContent=active?'Nascondi i costi ⌃':'Mostra tutti i costi ⌄';}
@@ -164,10 +181,10 @@
   function saveCurrent(name){syncCurrent();const record={id:newId(),name:name||'Simulazione '+new Date().toLocaleDateString('it-IT'),created:new Date().toISOString(),type:state.type,inputs:structuredClone(state.typeInputs[state.type]),advanced:state.advanced,solution:state.solution,
     summary:{monthlyOutlay:state.result.monthlyOutlay,annualRate:state.result.annualRate,months:state.result.months,principal:state.result.principal,totalCashOut:state.result.totalCashOut,totalInterest:state.result.totalInterest,upfrontCash:state.result.upfrontCash}};
     state.saved.unshift(record);if(state.saved.length>500)state.saved.length=500;store();renderArchive();toast('Simulazione salvata nell’archivio.');}
-  function loadRecord(id){const record=state.saved.find(s=>s.id===id);if(!record)return;const type=['mutuo','auto','prestito'].includes(record.type)?record.type:'mutuo';state.typeInputs[type]={...defaults[type],...record.inputs};state.advanced=Boolean(record.advanced);state.solution=record.solution==='budget'?'budget':'rata';state.type=type;document.body.dataset.financeType=type;
+  function loadRecord(id){const record=state.saved.find(s=>s.id===id);if(!record)return;const type=['mutuo','auto','prestito'].includes(record.type)?record.type:'mutuo';state.typeInputs[type]={...defaults[type],...record.inputs};state.advanced=Boolean(record.advanced);state.solution=record.solution==='budget'?'budget':'rata';state.type=type;document.body.dataset.financeType=type;applyTypeIdentity(type);
     restoreInputs(state.typeInputs[type]);document.querySelectorAll('.type-tab').forEach(b=>{const active=b.dataset.type===type;b.classList.toggle('active',active);b.setAttribute('aria-selected',String(active));});
     $('downWrap').hidden=type==='prestito';$('priceLabel').textContent=type==='mutuo'?"Prezzo dell'immobile":type==='auto'?'Prezzo auto':'Importo da ricevere';$('mortgageAdvanced').hidden=type!=='mutuo';$('autoAdvanced').hidden=type!=='auto';$('resultTypeBadge').textContent=type.toUpperCase();
-    setAdvanced(state.advanced);document.querySelectorAll('[data-solution]').forEach(b=>b.classList.toggle('active',b.dataset.solution===state.solution));$('budgetWrap').hidden=state.solution!=='budget';$('budgetExplanation').hidden=state.solution!=='budget';applyRateNotice();switchPage('calculatorPage');update();toast('Simulazione caricata: '+record.name);}
+    setAdvanced(state.advanced);document.querySelectorAll('[data-solution]').forEach(b=>b.classList.toggle('active',b.dataset.solution===state.solution));$('budgetWrap').hidden=state.solution!=='budget';$('budgetExplanation').hidden=state.solution!=='budget';applyRateNotice();switchPage(type+'Page');update();toast('Simulazione caricata: '+record.name);}
   function deleteRecord(id){const record=state.saved.find(s=>s.id===id);if(!record)return;if(!confirm(`Eliminare “${record.name}”?`))return;state.saved=state.saved.filter(s=>s.id!==id);state.compared=state.compared.filter(x=>x!==id);store();renderArchive();toast('Simulazione eliminata.');}
   function el(tag,cl,txt){const n=document.createElement(tag);if(cl)n.className=cl;if(txt!==undefined)n.textContent=txt;return n;}
   function renderArchive(){const list=$('savedList');list.replaceChildren();$('archiveCounter').textContent=state.saved.length;
@@ -178,6 +195,19 @@
       const checkWrap=el('label','saved-check'),check=document.createElement('input');check.type='checkbox';check.checked=state.compared.includes(item.id);check.onchange=()=>{if(check.checked){if(state.compared.length>=2){check.checked=false;toast('Puoi confrontare fino a 2 simulazioni.');return;}state.compared.push(item.id);}else state.compared=state.compared.filter(x=>x!==item.id);renderComparison();};checkWrap.append(check,document.createTextNode('Confronta'));
       actions.append(load,del,checkWrap);card.append(data,actions);list.append(card);}
     renderComparison();
+    const recent=$('homeRecentList');
+    if(recent){
+      recent.replaceChildren();
+      const items=state.saved.slice(0,3);
+      if(!items.length){recent.append(el('p','home-empty','Non hai ancora salvato simulazioni. Inizia scegliendo un calcolatore.'));}
+      for(const item of items){
+        const b=el('button','recent-entry');
+        b.type='button';
+        b.append(el('span','recent-entry-name',item.name),el('strong','recent-entry-value',euro(item.summary?.monthlyOutlay||0)+' /mese'));
+        b.onclick=()=>loadRecord(item.id);
+        recent.append(b);
+      }
+    }
   }
   function renderComparison(){const panel=$('comparePanel');panel.hidden=state.compared.length!==2;if(panel.hidden)return;
     const items=state.compared.map(id=>state.saved.find(s=>s.id===id));if(items.some(v=>!v)){panel.hidden=true;return;}
@@ -185,7 +215,20 @@
     const rows=[['Voce',items[0].name,items[1].name],['Rata mensile',...items.map(s=>euro(s.summary?.monthlyOutlay||0))],['Capitale finanziato',...items.map(s=>euro(s.summary?.principal||0))],['Durata',...items.map(s=>String(s.summary?.months||0)+' mesi')],['Interessi totali',...items.map(s=>euro(s.summary?.totalInterest||0))],['Esborso complessivo',...items.map(s=>euro(s.summary?.totalCashOut||0))]];
     for(const [idx,row] of rows.entries()){const tr=document.createElement('tr');for(const value of row){const cell=document.createElement(idx===0?'th':'td');cell.textContent=value;tr.append(cell);}table.append(tr);}$('compareTable').replaceChildren(table);
   }
-  function switchPage(page){document.querySelectorAll('.page').forEach(n=>n.hidden=n.id!==page);document.querySelectorAll('.nav-button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));if(page==='archivePage')renderArchive();window.scrollTo({top:0,behavior:'instant'});}
+  function switchPage(page){
+    const requested=page==='mutuoPage'?'mutuo':page==='autoPage'?'auto':page==='prestitoPage'?'prestito':null;
+    if(requested&&requested!==state.type)showType(requested);
+    const actual=requested?'calculatorPage':page;
+    document.querySelectorAll('.page').forEach(node=>node.hidden=node.id!==actual);
+    document.querySelectorAll('.nav-button').forEach(btn=>{
+      const active=btn.dataset.page===page;
+      btn.classList.toggle('active',active);
+      if(active)btn.setAttribute('aria-current','page');else btn.removeAttribute('aria-current');
+    });
+    document.body.dataset.activePage=page;
+    if(page==='archivePage'||page==='homePage')renderArchive();
+    window.scrollTo({top:0,behavior:'instant'});
+  }
   function install(){
     for(const input of document.querySelectorAll('.entry-panel input,.entry-panel select'))input.addEventListener('input',()=>{if(input.id==='rateType')applyRateNotice();update();});
     document.querySelectorAll('.type-tab').forEach(b=>b.addEventListener('click',()=>showType(b.dataset.type)));
@@ -194,6 +237,9 @@
     document.querySelectorAll('[data-down-mode]').forEach(b=>b.addEventListener('click',()=>{setDownMode(b.dataset.downMode,true);update();}));
     document.querySelectorAll('[data-solution]').forEach(b=>b.addEventListener('click',()=>setSolution(b.dataset.solution)));
     document.querySelectorAll('.nav-button').forEach(b=>b.addEventListener('click',()=>switchPage(b.dataset.page)));
+    document.querySelectorAll('[data-open-type]').forEach(b=>b.addEventListener('click',()=>switchPage(b.dataset.openType+'Page')));
+    $('backHome').addEventListener('click',()=>switchPage('homePage'));
+    $('showAllArchive').addEventListener('click',()=>switchPage('archivePage'));
     $('showSchedule').addEventListener('click',()=>{$('schedulePanel').hidden=!$('schedulePanel').hidden;if(!$('schedulePanel').hidden&&state.result){renderSchedule(state.result);$('schedulePanel').scrollIntoView({behavior:'smooth',block:'start'});} });
     $('csvButton').addEventListener('click',exportCSV);
     $('printSimulation').addEventListener('click',()=>{if(state.result)window.print();});
@@ -212,8 +258,8 @@
     window.addEventListener('online',()=>{$('connection').innerHTML='● <span>Solo sul dispositivo</span>';});
     window.addEventListener('offline',()=>{$('connection').innerHTML='● <span>Offline</span>';});
     if(!navigator.onLine)$('connection').innerHTML='● <span>Offline</span>';
-    if('serviceWorker' in navigator&&location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js?v=4.0.0',{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{}));
-    restoreInputs(state.typeInputs.mutuo);setAdvanced(false);showType('mutuo');renderArchive();
+    if('serviceWorker' in navigator&&location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js?v=5.0.0',{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{}));
+    restoreInputs(state.typeInputs.mutuo);setAdvanced(false);showType('mutuo');renderArchive();switchPage('homePage');
   }
   install();
 })();
