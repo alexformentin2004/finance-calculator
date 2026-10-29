@@ -187,7 +187,7 @@ function applyTypeIdentity(type){
     setAdvanced(state.advanced);document.querySelectorAll('[data-solution]').forEach(b=>b.classList.toggle('active',b.dataset.solution===state.solution));$('budgetWrap').hidden=state.solution!=='budget';$('budgetExplanation').hidden=state.solution!=='budget';applyRateNotice();switchPage(type+'Page');update();toast('Simulazione caricata: '+record.name);}
   function deleteRecord(id){const record=state.saved.find(s=>s.id===id);if(!record)return;if(!confirm(`Eliminare “${record.name}”?`))return;state.saved=state.saved.filter(s=>s.id!==id);state.compared=state.compared.filter(x=>x!==id);store();renderArchive();toast('Simulazione eliminata.');}
   function el(tag,cl,txt){const n=document.createElement(tag);if(cl)n.className=cl;if(txt!==undefined)n.textContent=txt;return n;}
-  function renderArchive(){const list=$('savedList');list.replaceChildren();$('archiveCounter').textContent=state.saved.length;
+  function renderArchive(){const list=$('savedList');list.replaceChildren();
     if(!state.saved.length){const empty=el('div','empty-state');empty.append(el('strong','', 'Nessuna simulazione salvata'),el('span','', 'Calcola una rata e premi “Salva simulazione”.'));list.append(empty);}
     for(const item of state.saved){const card=el('article','saved-card'),data=el('div'),title=el('h3','',item.name),date=el('p','',`${(item.type||'').toUpperCase()} · ${new Date(item.created).toLocaleDateString('it-IT')} · ${item.summary?.months||'?'} mesi`),money=el('strong','',euro(item.summary?.monthlyOutlay||0)+' / mese'),actions=el('div','saved-actions');
       data.append(title,date,money);
@@ -195,19 +195,7 @@ function applyTypeIdentity(type){
       const checkWrap=el('label','saved-check'),check=document.createElement('input');check.type='checkbox';check.checked=state.compared.includes(item.id);check.onchange=()=>{if(check.checked){if(state.compared.length>=2){check.checked=false;toast('Puoi confrontare fino a 2 simulazioni.');return;}state.compared.push(item.id);}else state.compared=state.compared.filter(x=>x!==item.id);renderComparison();};checkWrap.append(check,document.createTextNode('Confronta'));
       actions.append(load,del,checkWrap);card.append(data,actions);list.append(card);}
     renderComparison();
-    const recent=$('homeRecentList');
-    if(recent){
-      recent.replaceChildren();
-      const items=state.saved.slice(0,3);
-      if(!items.length){recent.append(el('p','home-empty','Non hai ancora salvato simulazioni. Inizia scegliendo un calcolatore.'));}
-      for(const item of items){
-        const b=el('button','recent-entry');
-        b.type='button';
-        b.append(el('span','recent-entry-name',item.name),el('strong','recent-entry-value',euro(item.summary?.monthlyOutlay||0)+' /mese'));
-        b.onclick=()=>loadRecord(item.id);
-        recent.append(b);
-      }
-    }
+
   }
   function renderComparison(){const panel=$('comparePanel');panel.hidden=state.compared.length!==2;if(panel.hidden)return;
     const items=state.compared.map(id=>state.saved.find(s=>s.id===id));if(items.some(v=>!v)){panel.hidden=true;return;}
